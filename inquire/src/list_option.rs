@@ -47,3 +47,41 @@ where
         self.value.fmt(f)
     }
 }
+
+/// Represents a selection made by a user alongside a count of said options, when prompted
+/// to select a count of each of several presented options.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct CountedListOption<T> {
+    /// The count of the option selected.
+    pub count: u32,
+    /// The option selected.
+    pub list_option: ListOption<T>,
+}
+
+impl<T> CountedListOption<T> {
+    /// Constructor for `CountedListOption`.
+    ///
+    /// # Arguments
+    ///
+    /// * `count` - Count of elements chosen.
+    /// * `list_option` - A ListOption representing the choice.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use inquire::list_option::{ListOption, CountedListOption};
+    ///
+    /// let answer = CountedListOption::new(0, ListOption::new(0, "a"));
+    /// ```
+    pub fn new(count: u32, list_option: ListOption<T>) -> Self {
+        Self { count, list_option }
+    }
+
+    /// Converts from `&CountedListOption<T>` to `CountedListOption<&T>`.
+    pub fn as_ref(&self) -> CountedListOption<&T> {
+        CountedListOption {
+            count: self.count,
+            list_option: self.list_option.as_ref(),
+        }
+    }
+}

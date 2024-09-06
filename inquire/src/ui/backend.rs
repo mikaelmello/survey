@@ -51,6 +51,14 @@ pub trait MultiSelectBackend: CommonBackend {
         checked: &BTreeSet<usize>,
     ) -> Result<()>;
 }
+pub trait MultiCountBackend: CommonBackend {
+    fn render_multiselect_prompt(&mut self, prompt: &str, cur_input: Option<&Input>) -> Result<()>;
+    fn render_options<D: Display>(
+        &mut self,
+        page: Page<'_, ListOption<D>>,
+        counts: &BTreeSet<(usize, u32)>,
+    ) -> Result<()>;
+}
 
 pub trait CustomTypeBackend: CommonBackend {
     fn render_prompt(
@@ -436,6 +444,59 @@ where
             }
 
             self.frame_renderer.write_styled(checkbox)?;
+
+            self.frame_renderer.write(" ")?;
+
+            self.print_option_value(idx, option, &page)?;
+
+            self.new_line()?;
+        }
+
+        Ok(())
+    }
+}
+
+impl<'a, I, T> MultiCountBackend for Backend<'a, I, T>
+where
+    I: InputReader,
+    T: Terminal,
+{
+    fn render_multiselect_prompt(&mut self, prompt: &str, cur_input: Option<&Input>) -> Result<()> {
+        if let Some(input) = cur_input {
+            self.print_prompt_with_input(prompt, None, input)
+        } else {
+            self.print_prompt(prompt)
+        }
+    }
+    fn render_options<D: Display>(
+        &mut self,
+        page: Page<'_, ListOption<D>>,
+        counts: &BTreeSet<(usize, u32)>,
+    ) -> Result<()> {
+        for (idx, option) in page.content.iter().enumerate() {
+            self.print_option_prefix(idx, &page)?;
+
+            self.frame_renderer.write(" ")?;
+
+            if let Some(res) = self.print_option_index_prefix(option.index, page.total) {
+                res?;
+                self.frame_renderer.write(" ")?;
+            }
+
+            // pull out the count and build the countbox text
+            let count = counts
+                .iter()
+                .find(|(i, _)| i == &option.index)
+                .map(|(_, c)| c)
+                .unwrap_or(&0);
+            let mut countbox = Styled::new(format!("[{}]", count));
+
+            match (self.render_config.selected_option, page.cursor) {
+                (Some(stylesheet), Some(cursor)) if cursor == idx => countbox.style = stylesheet,
+                _ => {}
+            };
+
+            self.frame_renderer.write_styled(countbox)?;
 
             self.frame_renderer.write(" ")?;
 

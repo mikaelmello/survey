@@ -5,6 +5,7 @@ mod custom_type;
 mod dateselect;
 #[cfg(feature = "editor")]
 mod editor;
+mod multicount;
 mod multiselect;
 mod one_liners;
 mod password;
@@ -21,6 +22,7 @@ pub use custom_type::*;
 pub use dateselect::*;
 #[cfg(feature = "editor")]
 pub use editor::*;
+pub use multicount::*;
 pub use multiselect::*;
 #[cfg(feature = "one-liners")]
 pub use one_liners::*;

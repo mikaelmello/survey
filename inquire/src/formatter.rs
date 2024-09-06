@@ -129,6 +129,43 @@ pub type OptionFormatter<'a, T> = &'a dyn Fn(ListOption<&T>) -> String;
 /// ```
 pub type MultiOptionFormatter<'a, T> = &'a dyn Fn(&[ListOption<&T>]) -> String;
 
+use crate::list_option::CountedListOption;
+/// Type alias for formatters used in [`MultiCount`](crate::MultiCount) prompts.
+///
+/// Formatters receive the user input and return a [(u32, String)] to be displayed
+/// to the user as the final answer.
+///
+/// # Examples
+///
+/// ```
+/// use inquire::list_option::{ListOption, CountedListOption};
+/// use inquire::formatter::MultiCountFormatter;
+///
+/// let formatter: MultiCountFormatter<str> = &|opts| {
+///     let len = opts.len();
+///     let options = match len {
+///         1 => "option",
+///         _ => "options",
+///     };
+///     let values = match len {
+///         1 => "value",
+///         _ => "values",
+///     };
+///     let counts = match len {
+///        1 => "count",
+///        _ => "counts",
+///     };
+///     format!("You selected {} {} with {}: {:?} and {}: {:?}", len, options, values, opts.iter().map(|c| c.list_option.value).collect::<Vec<_>>(), counts, opts.iter().map(|c| c.count).collect::<Vec<_>>())
+/// };
+///
+/// let mut ans = vec![CountedListOption::new(1, ListOption::new(1,"a"))];
+/// assert_eq!(String::from("You selected 1 option with value: [\"a\"] and count: [1]"), formatter(&ans));
+///
+/// ans.push(CountedListOption::new(3, ListOption::new(3, "d")));
+/// assert_eq!(String::from("You selected 2 options with values: [\"a\", \"d\"] and counts: [1, 3]"), formatter(&ans));
+/// ```
+pub type MultiCountFormatter<'a, T> = &'a dyn Fn(&[CountedListOption<&T>]) -> String;
+
 /// Type alias for formatters used in [`CustomType`](crate::CustomType) prompts.
 ///
 /// Formatters receive the user input and return a [String] to be displayed
