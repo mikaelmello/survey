@@ -2,7 +2,7 @@ use std::io::{stderr, Result, Stderr, Write};
 
 use crossterm::{
     cursor,
-    event::{self, KeyCode, KeyEvent, KeyModifiers},
+    event::{self, KeyCode, KeyEvent, KeyEventKind, KeyModifiers},
     queue,
     style::{Attribute, Color, Print, SetAttribute, SetBackgroundColor, SetForegroundColor},
     terminal::{self, ClearType},
@@ -38,7 +38,9 @@ impl InputReader for CrosstermKeyReader {
     fn read_key(&mut self) -> InquireResult<Key> {
         loop {
             if let event::Event::Key(key_event) = event::read()? {
-                return Ok(key_event.into());
+                if KeyEventKind::Press == key_event.kind {
+                    return Ok(key_event.into());
+                }
             }
         }
     }
