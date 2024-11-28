@@ -30,6 +30,10 @@ pub enum PasswordDisplayMode {
     /// render config.
     Masked,
 
+    /// Same as [Masked](PasswordDisplayMode::Masked), but the last typed
+    /// character remains unmasked immediately after typing it.
+    UnmaskedLastChar,
+
     /// Password text input is fully rendered as a normal input, just like
     /// [Text](crate::Text) prompts.
     Full,

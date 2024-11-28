@@ -116,6 +116,13 @@ These key bindings may be used in [`Editor`] prompts.
 | <kbd>enter</kbd> | Submit the current content of the temporary file being edited. |
 
 
+## Password Prompts
+
+These key bindings may be used in [`Password`] prompts.
+
+| **command**                    | **description**                                                                        |
+|--------------------------------|----------------------------------------------------------------------------------------|
+| <kbd>ctrl</kbd> + <kbd>r</kbd> | Toggles between [`Masked`]/[`UnmaskedLastChar`] and [`Full`] (unmasked) display modes. |
 
 
 [`Text`]: https://docs.rs/inquire/*/inquire/prompts/text/struct.Text.html
@@ -126,3 +133,6 @@ These key bindings may be used in [`Editor`] prompts.
 [`Editor`]: https://docs.rs/inquire/*/inquire/prompts/editor/struct.Editor.html
 [`customtype`]: https://docs.rs/inquire/*/inquire/struct.CustomType.html
 [`Password`]: https://docs.rs/inquire/*/inquire/prompts/password/struct.Password.html
+[`Masked`]: https://docs.rs/inquire/latest/inquire/enum.PasswordDisplayMode.html#variant.Masked
+[`UnmaskedLastChar`]: https://docs.rs/inquire/latest/inquire/enum.PasswordDisplayMode.html#variant.UnmaskedLastChar
+[`Full`]: https://docs.rs/inquire/latest/inquire/enum.PasswordDisplayMode.html#variant.Full
