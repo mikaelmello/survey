@@ -244,11 +244,11 @@ where
                 }
             }
             PasswordDisplayMode::UnmaskedLastChar => {
-                if self.confirmation_stage || !self.appending_chars {
-                    backend.render_prompt_with_masked_input(self.message, &self.input)?;
-                } else if self.appending_chars {
+                if !self.confirmation_stage && self.appending_chars {
                     backend
                         .render_prompt_with_unmasked_last_char_input(self.message, &self.input)?;
+                } else {
+                    backend.render_prompt_with_masked_input(self.message, &self.input)?;
                 }
 
                 if self.confirmation_stage {
