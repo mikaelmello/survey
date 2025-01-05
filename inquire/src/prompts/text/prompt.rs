@@ -15,22 +15,22 @@ use crate::{
 
 use super::{action::TextPromptAction, config::TextConfig, DEFAULT_HELP_MESSAGE_WITH_AC};
 
-pub struct TextPrompt<'a> {
+pub struct TextPrompt<'a, 'b> {
     message: &'a str,
     config: TextConfig,
     default: Option<&'a str>,
     help_message: Option<&'a str>,
     input: Input,
     formatter: StringFormatter<'a>,
-    validators: Vec<Box<dyn StringValidator>>,
+    validators: Vec<Box<dyn StringValidator + 'b>>,
     error: Option<ErrorMessage>,
-    autocompleter: Box<dyn Autocomplete>,
+    autocompleter: Box<dyn Autocomplete + 'b>,
     suggested_options: Vec<String>,
     suggestion_cursor_index: Option<usize>,
 }
 
-impl<'a> From<Text<'a>> for TextPrompt<'a> {
-    fn from(so: Text<'a>) -> Self {
+impl<'a, 'b> From<Text<'a, 'b>> for TextPrompt<'a, 'b> {
+    fn from(so: Text<'a, 'b>) -> Self {
         let input = Input::new_with(so.initial_value.unwrap_or_default());
         let input = if let Some(placeholder) = so.placeholder {
             input.with_placeholder(placeholder)
@@ -56,13 +56,13 @@ impl<'a> From<Text<'a>> for TextPrompt<'a> {
     }
 }
 
-impl<'a> From<&'a str> for Text<'a> {
+impl<'a, 'b> From<&'a str> for Text<'a, 'b> {
     fn from(val: &'a str) -> Self {
         Text::new(val)
     }
 }
 
-impl<'a> TextPrompt<'a> {
+impl<'a, 'b> TextPrompt<'a, 'b> {
     fn update_suggestions(&mut self) -> InquireResult<()> {
         self.suggested_options = self.autocompleter.get_suggestions(self.input.content())?;
         self.suggestion_cursor_index = None;
@@ -161,7 +161,7 @@ impl<'a> TextPrompt<'a> {
     }
 }
 
-impl<'a, Backend> Prompt<Backend> for TextPrompt<'a>
+impl<'a, 'b, Backend> Prompt<Backend> for TextPrompt<'a, 'b>
 where
     Backend: TextBackend,
 {

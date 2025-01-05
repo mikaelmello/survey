@@ -7,8 +7,8 @@ pub struct TextConfig {
     pub page_size: usize,
 }
 
-impl From<&Text<'_>> for TextConfig {
-    fn from(value: &Text<'_>) -> Self {
+impl From<&Text<'_, '_>> for TextConfig {
+    fn from(value: &Text<'_, '_>) -> Self {
         Self {
             page_size: value.page_size,
         }

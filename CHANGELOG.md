@@ -4,6 +4,7 @@
 
 ## [Unreleased] <!-- ReleaseDate -->
 
+- Don't require static lifetime for autocompleter and validator.
 - Fix autocomplete suggestions not being updated after a suggestion is accepted. Thanks @moritz-hoelting and @istudyatuni for reporting and fixing it!
 - Fix incorrect cursor placement when inputting CJK characters. Thanks @phostann (#270) for reporting it!
 - Removed unused dependency (newline-converter). Thanks @jonassmedegaard (#267) for catching it!

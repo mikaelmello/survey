@@ -2,7 +2,7 @@ use super::Text;
 use crate::ui::{Key, KeyModifiers};
 use crate::validator::{ErrorMessage, Validation};
 
-fn default<'a>() -> Text<'a> {
+fn default<'a, 'b>() -> Text<'a, 'b> {
     Text::new("Question?")
 }
 
