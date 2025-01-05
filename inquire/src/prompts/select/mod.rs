@@ -330,6 +330,26 @@ where
     ///
     /// Returns a [`ListOption`](crate::list_option::ListOption) containing
     /// the index of the selection and the owned object selected by the user.
+    ///
+    /// This method is intended for flows where the user skipping/cancelling
+    /// the prompt - by pressing ESC - is considered normal behavior. In this case,
+    /// it does not return `Err(InquireError::OperationCanceled)`, but `Ok(None)`.
+    ///
+    /// Meanwhile, if the user does submit an answer, the method wraps the return
+    /// type with `Some`.
+    pub fn raw_prompt_skippable(self) -> InquireResult<Option<ListOption<T>>> {
+        match self.raw_prompt() {
+            Ok(answer) => Ok(Some(answer)),
+            Err(InquireError::OperationCanceled) => Ok(None),
+            Err(err) => Err(err),
+        }
+    }
+
+    /// Parses the provided behavioral and rendering options and prompts
+    /// the CLI user for input according to the defined rules.
+    ///
+    /// Returns a [`ListOption`](crate::list_option::ListOption) containing
+    /// the index of the selection and the owned object selected by the user.
     pub fn raw_prompt(self) -> InquireResult<ListOption<T>> {
         let (input_reader, terminal) = get_default_terminal()?;
         let mut backend = Backend::new(input_reader, terminal, self.render_config)?;
