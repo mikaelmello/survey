@@ -221,6 +221,12 @@ impl<'a> Editor<'a> {
         self.prompt_with_backend(&mut backend)
     }
 
+    pub fn prompt_immediate(self) -> InquireResult<String> {
+        let (input_reader, terminal) = get_default_terminal()?;
+        let mut backend = Backend::new(input_reader, terminal, self.render_config)?;
+        EditorPrompt::new(self)?.prompt_immediate(&mut backend)
+    }
+
     pub(crate) fn prompt_with_backend<B: EditorBackend>(
         self,
         backend: &mut B,

@@ -1,5 +1,5 @@
 use std::{fs, io::Write, path::Path, process};
-
+use std::fmt::format;
 use tempfile::NamedTempFile;
 
 use crate::{
@@ -93,6 +93,17 @@ impl<'a> EditorPrompt<'a> {
         submission.truncate(len);
 
         Ok(submission)
+    }
+
+    pub fn prompt_immediate<Backend: EditorBackend>(mut self, backend: &mut Backend) -> InquireResult<String> {
+        <EditorPrompt<'a> as Prompt<Backend>>::handle(&mut self, EditorPromptAction::OpenEditor)?;
+        let answer = <EditorPrompt<'a> as Prompt<Backend>>::submit(&mut self)?;
+        let answer = answer.ok_or_else(|| InquireError::OperationCanceled)?;
+        let formatted = <EditorPrompt<'a> as Prompt<Backend>>::format_answer(&self, &answer);
+        backend.frame_setup()?;
+        backend.render_prompt_with_answer(self.message, &formatted)?;
+        backend.frame_finish(true)?;
+        Ok(answer)
     }
 }
 

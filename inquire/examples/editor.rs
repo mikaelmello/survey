@@ -21,7 +21,7 @@ fn main() -> InquireResult<()> {
             }
         })
         .with_render_config(description_render_config())
-        .prompt()?;
+        .prompt_immediate()?;
 
     Ok(())
 }
