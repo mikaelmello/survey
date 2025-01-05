@@ -89,5 +89,5 @@ impl fmt::Display for InquireError {
     }
 }
 
-/// Result type where errors are of type [InquireError](crate::error::InquireError)
+/// Result type where errors are of type [`InquireError`]
 pub type InquireResult<T> = Result<T, InquireError>;

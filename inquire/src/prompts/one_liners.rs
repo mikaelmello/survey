@@ -3,7 +3,7 @@ use crate::{error::InquireResult, Confirm, CustomType, Password, Text};
 /// This function is a helpful one-liner to prompt the user for the confirmation of an action.
 ///
 /// Under the hood, it is equivalent to calling `inquire::Confirm::new(message).prompt()`.
-/// See the documentation for [`inquire::Confirm`] for more information on its behavior.
+/// See the documentation for [`Confirm`] for more information on its behavior.
 ///
 /// # Arguments
 ///
@@ -42,7 +42,7 @@ where
 /// This function is a helpful one-liner to prompt the user for a text input.
 ///
 /// Under the hood, it is equivalent to calling `inquire::Text::new(message).prompt()`.
-/// See the documentation for [`inquire::Text`] for more information on its behavior.
+/// See the documentation for [`Text`] for more information on its behavior.
 ///
 /// # Arguments
 ///
@@ -77,7 +77,7 @@ where
 /// This function is a helpful one-liner to prompt the user for a password, or any secret text.
 ///
 /// Under the hood, it is equivalent to calling `inquire::Password::new(message).prompt()`.
-/// See the documentation for [`inquire::Password`] for more information on its behavior.
+/// See the documentation for [`Password`] for more information on its behavior.
 ///
 /// # Arguments
 ///
@@ -112,7 +112,7 @@ where
 /// This function is a helpful one-liner to prompt the user for a date.
 ///
 /// Under the hood, it is equivalent to calling `inquire::DateSelect::new(message).prompt()`.
-/// See the documentation for [`inquire::DateSelect`] for more information on its behavior.
+/// See the documentation for [`crate::DateSelect`] for more information on its behavior.
 ///
 /// # Arguments
 ///
@@ -148,7 +148,7 @@ where
 /// This function is a helpful one-liner to prompt the user for a number and parse it to f64.
 ///
 /// Under the hood, it is equivalent to calling `inquire::CustomType::<f64>::new(message).prompt()`.
-/// See the documentation for [`inquire::CustomType`] for more information on its behavior.
+/// See the documentation for [`CustomType`] for more information on its behavior.
 ///
 /// # Arguments
 ///
@@ -183,7 +183,7 @@ where
 /// This function is a helpful one-liner to prompt the user for a number and parse it to f32.
 ///
 /// Under the hood, it is equivalent to calling `inquire::CustomType::<f32>::new(message).prompt()`.
-/// See the documentation for [`inquire::CustomType`] for more information on its behavior.
+/// See the documentation for [`CustomType`] for more information on its behavior.
 ///
 /// # Arguments
 ///
@@ -218,7 +218,7 @@ where
 /// This function is a helpful one-liner to prompt the user for a number and parse it to u64.
 ///
 /// Under the hood, it is equivalent to calling `inquire::CustomType::<u64>::new(message).prompt()`.
-/// See the documentation for [`inquire::CustomType`] for more information on its behavior.
+/// See the documentation for [`CustomType`] for more information on its behavior.
 ///
 /// # Arguments
 ///
@@ -253,7 +253,7 @@ where
 /// This function is a helpful one-liner to prompt the user for a number and parse it to u32.
 ///
 /// Under the hood, it is equivalent to calling `inquire::CustomType::<u32>::new(message).prompt()`.
-/// See the documentation for [`inquire::CustomType`] for more information on its behavior.
+/// See the documentation for [`CustomType`] for more information on its behavior.
 ///
 /// # Arguments
 ///
@@ -288,7 +288,7 @@ where
 /// This function is a helpful one-liner to prompt the user for a number and parse it to usize.
 ///
 /// Under the hood, it is equivalent to calling `inquire::CustomType::<usize>::new(message).prompt()`.
-/// See the documentation for [`inquire::CustomType`] for more information on its behavior.
+/// See the documentation for [`CustomType`] for more information on its behavior.
 ///
 /// # Arguments
 ///
@@ -323,7 +323,7 @@ where
 /// This function is a helpful one-liner to prompt the user for a number and parse it to u128.
 ///
 /// Under the hood, it is equivalent to calling `inquire::CustomType::<u128>::new(message).prompt()`.
-/// See the documentation for [`inquire::CustomType`] for more information on its behavior.
+/// See the documentation for [`CustomType`] for more information on its behavior.
 ///
 /// # Arguments
 ///
