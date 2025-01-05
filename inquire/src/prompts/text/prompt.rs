@@ -1,4 +1,4 @@
-use std::cmp::min;
+use std::{cmp::min, borrow::Cow};
 
 use crate::{
     autocompletion::{NoAutoCompletion, Replacement},
@@ -131,26 +131,30 @@ impl<'a> TextPrompt<'a> {
         }
     }
 
-    fn get_current_answer(&self) -> &str {
+    fn get_current_answer(&mut self) -> Cow<'_, str> {
         // If there is a highlighted suggestion, assume user wanted it as
         // the answer.
-        if let Some(suggestion) = self.get_highlighted_suggestion() {
-            return suggestion;
+        let opt = self.get_highlighted_suggestion();
+        if let Some(opt) = opt {
+            if let Ok(Some(value)) = self.autocompleter.get_completion(self.input.content(), Some(opt.into())) {
+                return value.into();
+            }
         }
 
         // Empty input with default values override any validators.
         if self.input.content().is_empty() {
             if let Some(val) = self.default {
-                return val;
+                return val.into();
             }
         }
 
-        self.input.content()
+        self.input.content().into()
     }
 
-    fn validate_current_answer(&self) -> InquireResult<Validation> {
+    fn validate_current_answer(&mut self) -> InquireResult<Validation> {
+        let answer = self.get_current_answer().into_owned();
         for validator in &self.validators {
-            match validator.validate(self.get_current_answer()) {
+            match validator.validate(&answer) {
                 Ok(Validation::Valid) => {}
                 Ok(Validation::Invalid(msg)) => return Ok(Validation::Invalid(msg)),
                 Err(err) => return Err(InquireError::Custom(err)),
@@ -194,7 +198,7 @@ where
             }
         };
 
-        Ok(result)
+        Ok(result.map(|r|r.into()))
     }
 
     fn handle(&mut self, action: TextPromptAction) -> InquireResult<ActionResult> {
