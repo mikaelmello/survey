@@ -25,6 +25,7 @@ struct PasswordConfirmation<'a> {
 pub struct PasswordPrompt<'a> {
     message: &'a str,
     config: PasswordConfig,
+    default: Option<&'a str>,
     help_message: Option<&'a str>,
     input: Input,
     current_mode: PasswordDisplayMode,
@@ -51,6 +52,7 @@ impl<'a> From<Password<'a>> for PasswordPrompt<'a> {
         Self {
             message: so.message,
             config: (&so).into(),
+            default: so.default,
             help_message: so.help_message,
             current_mode: so.display_mode,
             confirmation,
@@ -154,6 +156,14 @@ where
 
     fn format_answer(&self, answer: &String) -> String {
         (self.formatter)(answer)
+    }
+
+    fn setup(&mut self) -> InquireResult<()> {
+        if let Some(val) = self.default {
+            self.message = val;
+        }
+
+        Ok(())
     }
 
     fn pre_cancel(&mut self) -> InquireResult<bool> {

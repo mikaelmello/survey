@@ -101,6 +101,9 @@ pub struct Password<'a> {
     /// Function that formats the user input and presents it to the user as the final rendering of the prompt.
     pub formatter: StringFormatter<'a>,
 
+    /// Default value, returned when the user input is empty.
+    pub default: Option<&'a str>,
+
     /// How the password input is displayed to the user.
     pub display_mode: PasswordDisplayMode,
 
@@ -161,12 +164,19 @@ impl<'a> Password<'a> {
             formatter: Self::DEFAULT_FORMATTER,
             validators: Self::DEFAULT_VALIDATORS,
             render_config: get_configuration(),
+            default: None,
         }
     }
 
     /// Sets the help message of the prompt.
     pub fn with_help_message(mut self, message: &'a str) -> Self {
         self.help_message = Some(message);
+        self
+    }
+
+    /// Sets the default input.
+    pub fn with_default(mut self, message: &'a str) -> Self {
+        self.default = Some(message);
         self
     }
 
