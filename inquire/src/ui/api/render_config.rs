@@ -56,7 +56,8 @@ pub struct RenderConfig<'a> {
     pub help_message: StyleSheet,
 
     /// Character used to mask password text inputs when in mode
-    /// [`Masked`](crate::prompts::PasswordDisplayMode).
+    /// [`Masked`](crate::prompts::PasswordDisplayMode::Masked) or
+    /// [`UnmaskedLastChar`](crate::prompts::PasswordDisplayMode::UnmaskedLastChar).
     ///
     /// Note: Styles for masked text inputs are set in the
     /// [`text_input`](crate::ui::RenderConfig::text_input) configuration.

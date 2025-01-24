@@ -7,6 +7,7 @@
 - Fix autocomplete suggestions not being updated after a suggestion is accepted. Thanks @moritz-hoelting and @istudyatuni for reporting and fixing it!
 - Fix incorrect cursor placement when inputting CJK characters. Thanks @phostann (#270) for reporting it!
 - Removed unused dependency (newline-converter). Thanks @jonassmedegaard (#267) for catching it!
+- Add a new password display mode to mask all but the last character. Thanks @nico-incubiq (#281) for the PR.
 
 ## [0.7.5] - 2024-04-23
 

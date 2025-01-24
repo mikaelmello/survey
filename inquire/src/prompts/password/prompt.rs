@@ -5,7 +5,7 @@ use crate::{
     prompts::prompt::{ActionResult, Prompt},
     ui::PasswordBackend,
     validator::{ErrorMessage, StringValidator, Validation},
-    InquireError, Password, PasswordDisplayMode,
+    InputAction, InquireError, Password, PasswordDisplayMode,
 };
 
 use super::{action::PasswordPromptAction, config::PasswordConfig};
@@ -33,6 +33,7 @@ pub struct PasswordPrompt<'a> {
     formatter: StringFormatter<'a>,
     validators: Vec<Box<dyn StringValidator>>,
     error: Option<ErrorMessage>,
+    appending_chars: bool,
 }
 
 impl<'a> From<Password<'a>> for PasswordPrompt<'a> {
@@ -59,6 +60,7 @@ impl<'a> From<Password<'a>> for PasswordPrompt<'a> {
             validators: so.validators,
             input: Input::new(),
             error: None,
+            appending_chars: false,
         }
     }
 }
@@ -82,7 +84,9 @@ impl<'a> PasswordPrompt<'a> {
 
     fn toggle_display_mode(&mut self) -> ActionResult {
         let new_mode = match self.current_mode {
-            PasswordDisplayMode::Hidden | PasswordDisplayMode::Masked => PasswordDisplayMode::Full,
+            PasswordDisplayMode::Hidden
+            | PasswordDisplayMode::Masked
+            | PasswordDisplayMode::UnmaskedLastChar => PasswordDisplayMode::Full,
             PasswordDisplayMode::Full => self.config.display_mode,
         };
 
@@ -196,8 +200,12 @@ where
     }
 
     fn handle(&mut self, action: PasswordPromptAction) -> InquireResult<ActionResult> {
+        self.appending_chars = false;
         let result = match action {
             PasswordPromptAction::ValueInput(input_action) => {
+                if let InputAction::Write(_) = input_action {
+                    self.appending_chars = true;
+                }
                 self.active_input_mut().handle(input_action).into()
             }
             PasswordPromptAction::ToggleDisplayMode => self.toggle_display_mode(),
@@ -233,6 +241,30 @@ where
                         )?;
                     }
                     _ => {}
+                }
+            }
+            PasswordDisplayMode::UnmaskedLastChar => {
+                if !self.confirmation_stage && self.appending_chars {
+                    backend
+                        .render_prompt_with_unmasked_last_char_input(self.message, &self.input)?;
+                } else {
+                    backend.render_prompt_with_masked_input(self.message, &self.input)?;
+                }
+
+                if self.confirmation_stage {
+                    if let Some(confirmation) = &self.confirmation {
+                        if self.appending_chars {
+                            backend.render_prompt_with_unmasked_last_char_input(
+                                confirmation.message,
+                                &confirmation.input,
+                            )?;
+                        } else {
+                            backend.render_prompt_with_masked_input(
+                                confirmation.message,
+                                &confirmation.input,
+                            )?;
+                        }
+                    }
                 }
             }
             PasswordDisplayMode::Full => {
